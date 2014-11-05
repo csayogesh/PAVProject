@@ -55,6 +55,8 @@ public class GlobleState {
 		while (it.hasNext()) {
 			Variable x = it.next();
 			x.setState(findState(x));
+			if(x.getState() == null)
+				x.setState(findLhsState(x));
 		}
 		Variable x = next.getLhs();
 		x.setState(findLhsState(x));
@@ -65,6 +67,7 @@ public class GlobleState {
 			return null;
 		Variable y = new Variable();
 		y.setName(x.getName());
+		x.displayMember = true;
 		return findState(y);
 	}
 

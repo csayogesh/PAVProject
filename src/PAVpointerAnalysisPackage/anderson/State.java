@@ -95,23 +95,26 @@ public class State {
 	@Override
 	public String toString() {
 		String lhs = "", end = "";
-		if(displayLHS) {
+		if (displayLHS) {
 			lhs = this.lhs.toString() + " → {";
 			end = "}";
 		}
 		String rhs = "";
 		Iterator<Variable> it = this.rhs.iterator();
-		while(it.hasNext()) {
+		while (it.hasNext()) {
 			Variable x = it.next();
-			if(x.getState() == null) {
+			if (x.getState() == null) {
 				rhs += x.toString();
+
 				continue;
 			}
 			x.getState().displayLHS = false;
 			rhs += x.getState().toString();
+			if (x.getMember() != null && x.displayMember)
+				rhs += "." + x.getMember();
 		}
 		String values = "";
-		if(this.values.size() > 0)
+		if (this.values.size() > 0)
 			values = this.values.toString();
 		return lhs + rhs + values + end;
 	}

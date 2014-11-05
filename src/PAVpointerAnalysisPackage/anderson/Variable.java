@@ -10,6 +10,7 @@ public class Variable {
 		this.member = member;
 		this.values = values;
 		this.state = state;
+		this.displayMember = false;
 	}
 	public Variable() {
 		super();
@@ -17,11 +18,13 @@ public class Variable {
 		this.member = null;
 		this.values = new LinkedList<String>();
 		this.state = null;
+		this.displayMember = false;
 	}
 	private String name;
 	private String member;
 	private LinkedList<String> values;
 	private State state;
+	public boolean displayMember;
 	
 	public String getName() {
 		return name;
@@ -43,6 +46,12 @@ public class Variable {
 		String str = "";
 		if(member != null)
 			str = "." + member;
+		
+		String name = this.name;
+		if(this.state != null) {
+			state.displayLHS = false;
+			name = state.toString();
+		}
 		return name + str;
 	}
 	@Override
