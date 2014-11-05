@@ -95,7 +95,13 @@ public class State {
 	@Override
 	public String toString() {
 		String lhs = "", end = "";
+		String[] lhsArr = null;
 		if (displayLHS) {
+			lhsArr = this.lhs.getArray();
+			if (lhsArr != null)
+				for (int i = 0; i < lhsArr.length; i++)
+					lhsArr[i] += " → {";
+
 			lhs = this.lhs.toString() + " → {";
 			end = "}";
 		}
@@ -105,17 +111,31 @@ public class State {
 			Variable x = it.next();
 			if (x.getState() == null) {
 				rhs += x.toString();
-
 				continue;
 			}
 			x.getState().displayLHS = false;
-			rhs += x.getState().toString();
-			if (x.getMember() != null && x.displayMember)
-				rhs += "." + x.getMember();
+			if (x.getMember() != null && x.displayMember) {
+				String[] arr = x.getArray();
+				if (arr != null)
+					for (int i = 0; i < arr.length; i++)
+						rhs += arr[i];
+				else
+					rhs += "." + x.getMember();
+			} else
+				rhs += x.getState().toString();
 		}
 		String values = "";
 		if (this.values.size() > 0)
 			values = this.values.toString();
+		String res = "";
+		if (lhsArr != null) {
+			for (int i = 0; i < lhsArr.length; i++) {
+				res += lhsArr[i] + rhs + values + end;
+				if (i < lhsArr.length - 1)
+					res += "\n";
+			}
+			return res;
+		}
 		return lhs + rhs + values + end;
 	}
 }

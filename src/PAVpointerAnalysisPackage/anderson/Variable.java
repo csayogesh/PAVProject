@@ -95,4 +95,15 @@ public class Variable {
 	public void setState(State state) {
 		this.state = state;
 	}
+	public String[] getArray() {
+		String arr[] = null;
+		if(this.member != null && this.state != null) {
+			this.state.displayLHS = false;
+			String str = this.state.toString();
+			arr = str.split("]");
+			for(int i = 0; i < arr.length; i++)
+				arr[i] += "]." + member;
+		}
+		return arr;
+	}
 }
