@@ -9,6 +9,7 @@ public class State {
 		this.lhs = null;
 		this.rhs = new LinkedList<Variable>();
 		this.values = new LinkedList<String>();
+		this.displayLHS = true;
 	}
 
 	public State(Variable lhs, LinkedList<Variable> rhs,
@@ -22,6 +23,7 @@ public class State {
 	private Variable lhs;
 	private LinkedList<Variable> rhs;
 	private LinkedList<String> values;
+	public boolean displayLHS;
 
 	public Variable getLhs() {
 		return lhs;
@@ -92,6 +94,25 @@ public class State {
 
 	@Override
 	public String toString() {
-		return lhs + " → {" + rhs + ", " + values + "}";
+		String lhs = "", end = "";
+		if(displayLHS) {
+			lhs = this.lhs.toString() + " → {";
+			end = "}";
+		}
+		String rhs = "";
+		Iterator<Variable> it = this.rhs.iterator();
+		while(it.hasNext()) {
+			Variable x = it.next();
+			if(x.getState() == null) {
+				rhs += x.toString();
+				continue;
+			}
+			x.getState().displayLHS = false;
+			rhs += x.getState().toString();
+		}
+		String values = "";
+		if(this.values.size() > 0)
+			values = this.values.toString();
+		return lhs + rhs + values + end;
 	}
 }

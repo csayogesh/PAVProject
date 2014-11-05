@@ -3,21 +3,26 @@ package PAVpointerAnalysisPackage.anderson;
 import java.util.LinkedList;
 
 public class Variable {
+	public Variable(String name, String member, LinkedList<String> values,
+			State state) {
+		super();
+		this.name = name;
+		this.member = member;
+		this.values = values;
+		this.state = state;
+	}
 	public Variable() {
 		super();
 		this.name = null;
 		this.member = null;
 		this.values = new LinkedList<String>();
-	}
-	public Variable(String name, String member, LinkedList<String> values) {
-		super();
-		this.name = name;
-		this.member = member;
-		this.values = values;
+		this.state = null;
 	}
 	private String name;
 	private String member;
 	private LinkedList<String> values;
+	private State state;
+	
 	public String getName() {
 		return name;
 	}
@@ -68,5 +73,17 @@ public class Variable {
 		} else if (!name.equals(other.name))
 			return false;
 		return true;
+	}
+	/**
+	 * @return the state
+	 */
+	public State getState() {
+		return state;
+	}
+	/**
+	 * @param state the state to set
+	 */
+	public void setState(State state) {
+		this.state = state;
 	}
 }

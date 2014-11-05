@@ -41,6 +41,7 @@ public class AndersonAnalysis {
 			if (lines[i].equals("Instructions:"))
 				istart = true;
 		}
+		GlobleState.linkAllStates();
 		GlobleState.printGlobleStates();
 	}
 
