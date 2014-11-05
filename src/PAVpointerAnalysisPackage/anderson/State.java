@@ -125,17 +125,37 @@ public class State {
 				rhs += x.getState().toString();
 		}
 		String values = "";
-		if (this.values.size() > 0)
-			values = this.values.toString();
+		if (this.values.size() > 0) {
+			Iterator<String> i = this.values.iterator();
+			while (i.hasNext()) {
+				values += "[" + i.next() + "]";
+				if (i.hasNext())
+					values += ", ";
+			}
+			// values = this.values.toString();
+		}
 		String res = "";
 		if (lhsArr != null) {
 			for (int i = 0; i < lhsArr.length; i++) {
-				res += lhsArr[i] + rhs + values + end;
+				String tmp = lhsArr[i] + rhs + values + end;
+				tmp = addCommas(tmp);
 				if (i < lhsArr.length - 1)
-					res += "\n";
+					tmp += "\n";
+				res += tmp;
 			}
 			return res;
 		}
-		return lhs + rhs + values + end;
+		return (lhs + rhs + values + end);
+	}
+
+	private String addCommas(String string) {
+		String[] arr = string.split("\\]\\[");
+		String res = "";
+		for (int i = 0; i < arr.length; i++) {
+			res += arr[i];
+			if (i < arr.length - 1)
+				res += "], [";
+		}
+		return res;
 	}
 }

@@ -11,9 +11,7 @@ class TestCases{
 			snode list = new snode();
 			snode t = list.next;
 			int len = 4;
-			snode temp = null;
-			if(temp == list)
-				temp = new snode();
+			snode temp = list;
 			for(int i=0; i < len; i++){
 				if(i%2==0)
 					temp.info = new data(1);

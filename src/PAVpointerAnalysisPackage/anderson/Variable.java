@@ -12,6 +12,7 @@ public class Variable {
 		this.state = state;
 		this.displayMember = false;
 	}
+
 	public Variable() {
 		super();
 		this.name = null;
@@ -20,40 +21,47 @@ public class Variable {
 		this.state = null;
 		this.displayMember = false;
 	}
+
 	private String name;
 	private String member;
 	private LinkedList<String> values;
 	private State state;
 	public boolean displayMember;
-	
+
 	public String getName() {
 		return name;
 	}
+
 	public void setName(String name) {
 		this.name = name;
 	}
+
 	public String getMember() {
 		return member;
 	}
+
 	public void setMember(String member) {
 		this.member = member;
 	}
+
 	public LinkedList<String> getValues() {
 		return values;
 	}
+
 	@Override
 	public String toString() {
 		String str = "";
-		if(member != null)
+		if (member != null)
 			str = "." + member;
-		
+
 		String name = this.name;
-		if(this.state != null) {
+		if (this.state != null) {
 			state.displayLHS = false;
 			name = state.toString();
 		}
 		return name + str;
 	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -62,6 +70,7 @@ public class Variable {
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		return result;
 	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -83,26 +92,32 @@ public class Variable {
 			return false;
 		return true;
 	}
+
 	/**
 	 * @return the state
 	 */
 	public State getState() {
 		return state;
 	}
+
 	/**
-	 * @param state the state to set
+	 * @param state
+	 *            the state to set
 	 */
 	public void setState(State state) {
 		this.state = state;
 	}
+
 	public String[] getArray() {
 		String arr[] = null;
-		if(this.member != null && this.state != null) {
+		if (this.member != null && this.state != null) {
 			this.state.displayLHS = false;
 			String str = this.state.toString();
 			arr = str.split("]");
-			for(int i = 0; i < arr.length; i++)
+			for (int i = 0; i < arr.length; i++)
 				arr[i] += "]." + member;
+		} else if (this.member != null) {
+			arr = new String[] { "" + name + "." + member };
 		}
 		return arr;
 	}
