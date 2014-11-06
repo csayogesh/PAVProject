@@ -35,7 +35,6 @@ class TestCases{
 	public static void main(String args[]){
 		TestCases t = new TestCases();
 		snode l = t.createSingleLinkList();
-	}
-	
+	}	
 }
 
