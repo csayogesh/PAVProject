@@ -27,7 +27,7 @@ public class Variable {
 	private String member;
 	private LinkedList<String> values;
 	private State state;
-	private GlobleState gs;
+	private GlobalState gs;
 	public boolean displayMember;
 
 	public String getName() {
@@ -140,11 +140,11 @@ public class Variable {
 		return arr;
 	}
 
-	public GlobleState getGs() {
+	public GlobalState getGs() {
 		return gs;
 	}
 
-	public void setGs(GlobleState gs) {
+	public void setGs(GlobalState gs) {
 		this.gs = gs;
 	}
 }

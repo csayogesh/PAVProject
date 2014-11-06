@@ -35,7 +35,7 @@ public class AndersonAnalysis {
 		String str = ir.toString();
 		String[] lines = str.split("\n");
 		boolean istart = false;
-		GlobleState gs = new GlobleState();
+		GlobalState gs = new GlobalState();
 		for (int i = 0; i < lines.length; i++) {
 			if (istart)
 				gs.setState(fetchState(lines[i], gs));
@@ -44,10 +44,10 @@ public class AndersonAnalysis {
 		}
 		System.out.println("Analysis Using Anderson's " + "Algorithm:");
 		gs.linkAllStates();
-		gs.printGlobleStates();
+		gs.printGlobalStates();
 	}
 
-	private static State fetchState(String string, GlobleState gs) {
+	private static State fetchState(String string, GlobalState gs) {
 		State state = null;
 		if (string.contains(" = new <"))
 			state = extractNew(string, gs);
@@ -62,7 +62,7 @@ public class AndersonAnalysis {
 		return state;
 	}
 
-	private static State extractPhi(String string, GlobleState gs) {
+	private static State extractPhi(String string, GlobalState gs) {
 		State state = new State();
 		String[] arr = string.split(" ");
 		Variable lhs = new Variable();
@@ -80,7 +80,7 @@ public class AndersonAnalysis {
 		return state;
 	}
 
-	private static State extractPhiNull(String string, GlobleState gs) {
+	private static State extractPhiNull(String string, GlobalState gs) {
 		State state = new State();
 		String[] arr = string.split(" ");
 		Variable lhs = new Variable();
@@ -94,7 +94,7 @@ public class AndersonAnalysis {
 		return state;
 	}
 
-	private static State extractGetfield(String string, GlobleState gs) {
+	private static State extractGetfield(String string, GlobalState gs) {
 		State state = new State();
 		String[] arr = string.split(" ");
 		Variable lhs = new Variable();
@@ -109,7 +109,7 @@ public class AndersonAnalysis {
 		return state;
 	}
 
-	private static State extractPutfield(String string, GlobleState gs) {
+	private static State extractPutfield(String string, GlobalState gs) {
 		State state = new State();
 		String[] arr = string.split(" ");
 		Variable lhs = new Variable();
@@ -124,7 +124,7 @@ public class AndersonAnalysis {
 		return state;
 	}
 
-	private static State extractNew(String string, GlobleState gs) {
+	private static State extractNew(String string, GlobalState gs) {
 		State state = new State();
 		String[] arr = string.split(" ");
 		Variable lhs = new Variable();
