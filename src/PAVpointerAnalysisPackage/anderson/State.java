@@ -141,11 +141,21 @@ public class State {
 				tmp = addCommas(tmp);
 				if (i < lhsArr.length - 1)
 					tmp += "\n";
+				if (i > 0)
+					tmp = removeComma(tmp);
 				res += tmp;
 			}
 			return res;
 		}
-		return (lhs + rhs + values + end);
+		return addCommas(lhs + rhs + values + end);
+	}
+
+	private String removeComma(String tmp) {
+		String str = "";
+		String[] arr = tmp.split(" ");
+		for (int i = 1; i < arr.length; i++)
+			str += arr[i] + " ";
+		return str;
 	}
 
 	private String addCommas(String string) {

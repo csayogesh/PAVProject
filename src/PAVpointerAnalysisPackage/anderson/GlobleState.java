@@ -62,7 +62,7 @@ public class GlobleState {
 		x.setState(findLhsState(x));
 	}
 
-	private static State findLhsState(Variable x) {
+	public static State findLhsState(Variable x) {
 		if (x.getMember() == null)
 			return null;
 		Variable y = new Variable();
@@ -71,7 +71,7 @@ public class GlobleState {
 		return findState(y);
 	}
 
-	private static State findState(Variable x) {
+	public static State findState(Variable x) {
 		State state = new State();
 		state.setLhs(x);
 		Iterator<State> it = states.iterator();

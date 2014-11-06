@@ -1,5 +1,6 @@
 package PAVpointerAnalysisPackage.anderson;
 
+import java.util.Iterator;
 import java.util.LinkedList;
 
 public class Variable {
@@ -80,16 +81,32 @@ public class Variable {
 		if (getClass() != obj.getClass())
 			return false;
 		Variable other = (Variable) obj;
+
 		if (member == null) {
 			if (other.member != null)
 				return false;
 		} else if (!member.equals(other.member))
 			return false;
+		if (member != null && member.equals(other.member)) {
+			Variable x = new Variable();
+			x.setName(other.getName());
+			boolean old = this.displayMember;
+			State state = GlobleState.findLhsState(this);
+			this.displayMember = old;
+			Iterator<Variable> it = null;
+			if (state != null)
+				it = state.getRhs().iterator();
+			if (it != null)
+				while (it.hasNext())
+					if (it.next().equals(x))
+						return true;
+		}
 		if (name == null) {
 			if (other.name != null)
 				return false;
 		} else if (!name.equals(other.name))
 			return false;
+
 		return true;
 	}
 

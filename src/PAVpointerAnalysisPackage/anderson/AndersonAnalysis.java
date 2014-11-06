@@ -41,6 +41,7 @@ public class AndersonAnalysis {
 			if (lines[i].equals("Instructions:"))
 				istart = true;
 		}
+		System.out.println("Analysis Using Anderson's " + "Algorithm:");
 		GlobleState.linkAllStates();
 		GlobleState.printGlobleStates();
 	}
@@ -65,13 +66,13 @@ public class AndersonAnalysis {
 		String[] arr = string.split(" ");
 		Variable lhs = new Variable();
 		lhs.setName(arr[11]);
-		state.setLhs(lhs );
+		state.setLhs(lhs);
 		Variable rhs1 = new Variable();
 		rhs1.setName(arr[15].split(",")[1]);
-		state.setRhs(rhs1 );
+		state.setRhs(rhs1);
 		rhs1 = new Variable();
 		rhs1.setName(arr[15].split(",")[0]);
-		state.setRhs(rhs1 );
+		state.setRhs(rhs1);
 		return state;
 	}
 
@@ -80,10 +81,10 @@ public class AndersonAnalysis {
 		String[] arr = string.split(" ");
 		Variable lhs = new Variable();
 		lhs.setName(arr[11]);
-		state.setLhs(lhs );
+		state.setLhs(lhs);
 		Variable rhs1 = new Variable();
 		rhs1.setName(arr[15].split(":#null,")[1]);
-		state.setRhs(rhs1 );
+		state.setRhs(rhs1);
 		return state;
 	}
 
@@ -92,7 +93,7 @@ public class AndersonAnalysis {
 		String[] arr = string.split(" ");
 		Variable lhs = new Variable();
 		lhs.setName(arr[3]);
-		state.setLhs(lhs );
+		state.setLhs(lhs);
 		Variable rhs1 = new Variable();
 		rhs1.setName(arr[12].split("\\(")[0]);
 		rhs1.setMember(arr[9].split(",")[0]);
