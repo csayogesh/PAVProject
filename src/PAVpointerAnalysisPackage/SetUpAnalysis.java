@@ -143,6 +143,8 @@ public class SetUpAnalysis {
 	}
 
 	public IR getIR(CGNode node) {
+		if(node == null)
+			return null;
 		IR ir = node.getIR();
 		try {
 			String args[] = { "-appJar", classpath, "-sig",

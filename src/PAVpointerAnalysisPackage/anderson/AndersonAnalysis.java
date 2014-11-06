@@ -32,6 +32,8 @@ import com.ibm.wala.ssa.analysis.ExplodedControlFlowGraph;
 @SuppressWarnings("unused")
 public class AndersonAnalysis {
 	public static void performAnalysisOnMethod(IR ir) {
+		if (ir == null)
+			return;
 		String str = ir.toString();
 		String[] lines = str.split("\n");
 		boolean istart = false;
@@ -59,6 +61,38 @@ public class AndersonAnalysis {
 			state = extractPhiNull(string, gs);
 		else if (string.contains(" = phi ") && !string.contains(":#"))
 			state = extractPhi(string, gs);
+		else if (string.contains("arraystore"))
+			state = extractArrayStore(string, gs);
+		else if(string.contains("arrayload"))
+			state = extractArrayload(string, gs);
+		return state;
+	}
+
+	private static State extractArrayload(String string, GlobalState gs) {
+		State state = new State();
+		Variable lhs = new Variable();
+		lhs.setGs(gs);
+		String[] arr = string.split(" ");
+		lhs.setName(arr[3]);
+		state.setLhs(lhs);
+		Variable rhs1 = new Variable();
+		rhs1.setGs(gs);
+		rhs1.setName(arr[6].split("\\[")[0]);
+		state.setRhs(rhs1);
+		return state;
+	}
+
+	private static State extractArrayStore(String string, GlobalState gs) {
+		State state = new State();
+		Variable lhs = new Variable();
+		lhs.setGs(gs);
+		String[] arr = string.split(" ");
+		lhs.setName(arr[4].split("\\[")[0]);
+		state.setLhs(lhs);
+		Variable rhs1 = new Variable();
+		rhs1.setGs(gs);
+		rhs1.setName(arr[6]);
+		state.setRhs(rhs1);
 		return state;
 	}
 
