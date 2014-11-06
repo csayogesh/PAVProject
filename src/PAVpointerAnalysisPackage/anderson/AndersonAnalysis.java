@@ -31,6 +31,9 @@ import com.ibm.wala.ssa.analysis.ExplodedControlFlowGraph;
 
 @SuppressWarnings("unused")
 public class AndersonAnalysis {
+	public static void main(String[] args) {
+		performAnalysisOnMethod(null);
+	}
 	public static void performAnalysisOnMethod(IR ir) {
 		if (ir == null)
 			return;
@@ -58,12 +61,12 @@ public class AndersonAnalysis {
 		else if (string.contains(" getfield <"))
 			state = extractGetfield(string, gs);
 		else if (string.contains(" = phi ") && string.contains(":#null,"))
-			state = extractPhiNull(string, gs);
+			state = extractPhi(string, gs);
 		else if (string.contains(" = phi ") && !string.contains(":#"))
 			state = extractPhi(string, gs);
 		else if (string.contains("arraystore"))
 			state = extractArrayStore(string, gs);
-		else if(string.contains("arrayload"))
+		else if (string.contains("arrayload"))
 			state = extractArrayload(string, gs);
 		return state;
 	}
@@ -103,28 +106,17 @@ public class AndersonAnalysis {
 		lhs.setGs(gs);
 		lhs.setName(arr[11]);
 		state.setLhs(lhs);
-		Variable rhs1 = new Variable();
-		rhs1.setGs(gs);
-		rhs1.setName(arr[15].split(",")[1]);
-		state.setRhs(rhs1);
-		rhs1 = new Variable();
-		rhs1.setGs(gs);
-		rhs1.setName(arr[15].split(",")[0]);
-		state.setRhs(rhs1);
-		return state;
-	}
 
-	private static State extractPhiNull(String string, GlobalState gs) {
-		State state = new State();
-		String[] arr = string.split(" ");
-		Variable lhs = new Variable();
-		lhs.setGs(gs);
-		lhs.setName(arr[11]);
-		state.setLhs(lhs);
-		Variable rhs1 = new Variable();
-		rhs1.setGs(gs);
-		rhs1.setName(arr[15].split(":#null,")[1]);
-		state.setRhs(rhs1);
+		String[] arr2 = arr[15].split(",");
+		for (int i = 0; i < arr2.length; i++) {
+			if (arr2[i].contains("#"))
+				continue;
+			Variable rhs1 = new Variable();
+			rhs1.setGs(gs);
+			rhs1.setName(arr2[i]);
+			state.setRhs(rhs1);
+		}
+
 		return state;
 	}
 

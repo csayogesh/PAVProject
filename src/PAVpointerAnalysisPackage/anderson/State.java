@@ -153,23 +153,8 @@ public class State {
 
 		return (lhs + rhs + comma + values + end);
 	}
-
-	private String removeComma(String tmp) {
-		String str = "";
-		String[] arr = tmp.split(" ");
-		for (int i = 1; i < arr.length; i++)
-			str += arr[i] + " ";
-		return str;
-	}
-
-	private String addCommas(String string) {
-		String[] arr = string.split("\\]\\[");
-		String res = "";
-		for (int i = 0; i < arr.length; i++) {
-			res += arr[i];
-			if (i < arr.length - 1)
-				res += "], [";
-		}
-		return res;
+	public static void main(String[] args) {
+		new State().toString();
 	}
 }
+
