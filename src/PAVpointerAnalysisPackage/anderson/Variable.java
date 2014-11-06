@@ -27,6 +27,7 @@ public class Variable {
 	private String member;
 	private LinkedList<String> values;
 	private State state;
+	private GlobleState gs;
 	public boolean displayMember;
 
 	public String getName() {
@@ -91,7 +92,7 @@ public class Variable {
 			Variable x = new Variable();
 			x.setName(other.getName());
 			boolean old = this.displayMember;
-			State state = GlobleState.findLhsState(this);
+			State state = gs.findLhsState(this);
 			this.displayMember = old;
 			Iterator<Variable> it = null;
 			if (state != null)
@@ -137,5 +138,13 @@ public class Variable {
 			arr = new String[] { "" + name + "." + member };
 		}
 		return arr;
+	}
+
+	public GlobleState getGs() {
+		return gs;
+	}
+
+	public void setGs(GlobleState gs) {
+		this.gs = gs;
 	}
 }

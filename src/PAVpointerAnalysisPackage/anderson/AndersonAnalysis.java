@@ -35,89 +35,100 @@ public class AndersonAnalysis {
 		String str = ir.toString();
 		String[] lines = str.split("\n");
 		boolean istart = false;
+		GlobleState gs = new GlobleState();
 		for (int i = 0; i < lines.length; i++) {
 			if (istart)
-				GlobleState.setState(fetchState(lines[i]));
+				gs.setState(fetchState(lines[i], gs));
 			if (lines[i].equals("Instructions:"))
 				istart = true;
 		}
 		System.out.println("Analysis Using Anderson's " + "Algorithm:");
-		GlobleState.linkAllStates();
-		GlobleState.printGlobleStates();
+		gs.linkAllStates();
+		gs.printGlobleStates();
 	}
 
-	private static State fetchState(String string) {
+	private static State fetchState(String string, GlobleState gs) {
 		State state = null;
 		if (string.contains(" = new <"))
-			state = extractNew(string);
+			state = extractNew(string, gs);
 		else if (string.contains(" putfield v"))
-			state = extractPutfield(string);
+			state = extractPutfield(string, gs);
 		else if (string.contains(" getfield <"))
-			state = extractGetfield(string);
+			state = extractGetfield(string, gs);
 		else if (string.contains(" = phi ") && string.contains(":#null,"))
-			state = extractPhiNull(string);
+			state = extractPhiNull(string, gs);
 		else if (string.contains(" = phi ") && !string.contains(":#"))
-			state = extractPhi(string);
+			state = extractPhi(string, gs);
 		return state;
 	}
 
-	private static State extractPhi(String string) {
+	private static State extractPhi(String string, GlobleState gs) {
 		State state = new State();
 		String[] arr = string.split(" ");
 		Variable lhs = new Variable();
+		lhs.setGs(gs);
 		lhs.setName(arr[11]);
 		state.setLhs(lhs);
 		Variable rhs1 = new Variable();
+		rhs1.setGs(gs);
 		rhs1.setName(arr[15].split(",")[1]);
 		state.setRhs(rhs1);
 		rhs1 = new Variable();
+		rhs1.setGs(gs);
 		rhs1.setName(arr[15].split(",")[0]);
 		state.setRhs(rhs1);
 		return state;
 	}
 
-	private static State extractPhiNull(String string) {
+	private static State extractPhiNull(String string, GlobleState gs) {
 		State state = new State();
 		String[] arr = string.split(" ");
 		Variable lhs = new Variable();
+		lhs.setGs(gs);
 		lhs.setName(arr[11]);
 		state.setLhs(lhs);
 		Variable rhs1 = new Variable();
+		rhs1.setGs(gs);
 		rhs1.setName(arr[15].split(":#null,")[1]);
 		state.setRhs(rhs1);
 		return state;
 	}
 
-	private static State extractGetfield(String string) {
+	private static State extractGetfield(String string, GlobleState gs) {
 		State state = new State();
 		String[] arr = string.split(" ");
 		Variable lhs = new Variable();
+		lhs.setGs(gs);
 		lhs.setName(arr[3]);
 		state.setLhs(lhs);
 		Variable rhs1 = new Variable();
+		rhs1.setGs(gs);
 		rhs1.setName(arr[12].split("\\(")[0]);
 		rhs1.setMember(arr[9].split(",")[0]);
 		state.setRhs(rhs1);
 		return state;
 	}
 
-	private static State extractPutfield(String string) {
+	private static State extractPutfield(String string, GlobleState gs) {
 		State state = new State();
 		String[] arr = string.split(" ");
 		Variable lhs = new Variable();
+		lhs.setGs(gs);
 		lhs.setName(arr[4]);
 		lhs.setMember(arr[10].split(",")[0]);
 		state.setLhs(lhs);
 		Variable rhs1 = new Variable();
+		rhs1.setGs(gs);
 		rhs1.setName(arr[6]);
 		state.setRhs(rhs1);
 		return state;
 	}
 
-	private static State extractNew(String string) {
+	private static State extractNew(String string, GlobleState gs) {
 		State state = new State();
 		String[] arr = string.split(" ");
 		Variable lhs = new Variable();
+		lhs.setGs(gs);
 		lhs.setName(arr[3]);
 		state.setLhs(lhs);
 		state.setValue("new " + arr[0]);

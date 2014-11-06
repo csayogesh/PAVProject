@@ -4,26 +4,33 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 public class GlobleState {
-	private static LinkedList<State> states;
-
-	static {
-		states = new LinkedList<State>();
+	public GlobleState() {
+		super();
+		this.states = new LinkedList<State>();
 	}
 
-	public static LinkedList<State> getStates() {
+	public GlobleState(LinkedList<State> states) {
+		super();
+		this.states = states;
+	}
+
+	private LinkedList<State> states;
+
+
+	public LinkedList<State> getStates() {
 		return states;
 	}
 
-	public static void setState(State state) {
+	public void setState(State state) {
 		if (state == null)
 			return;
 		if (!states.contains(state))
-			GlobleState.states.add(state);
+			this.states.add(state);
 		else
 			merge(state);
 	}
 
-	private static void merge(State state) {
+	private void merge(State state) {
 		Iterator<State> x = states.iterator();
 		while (x.hasNext()) {
 			State obj = x.next();
@@ -35,7 +42,7 @@ public class GlobleState {
 		}
 	}
 
-	public static void printGlobleStates() {
+	public void printGlobleStates() {
 		Iterator<State> it = states.iterator();
 		while (it.hasNext()) {
 			State x = it.next();
@@ -44,13 +51,13 @@ public class GlobleState {
 		}
 	}
 
-	public static void linkAllStates() {
+	public void linkAllStates() {
 		Iterator<State> it = states.iterator();
 		while (it.hasNext())
 			link(it.next());
 	}
 
-	private static void link(State next) {
+	private void link(State next) {
 		Iterator<Variable> it = next.getRhs().iterator();
 		while (it.hasNext()) {
 			Variable x = it.next();
@@ -62,7 +69,7 @@ public class GlobleState {
 		x.setState(findLhsState(x));
 	}
 
-	public static State findLhsState(Variable x) {
+	public State findLhsState(Variable x) {
 		if (x.getMember() == null)
 			return null;
 		Variable y = new Variable();
@@ -71,7 +78,7 @@ public class GlobleState {
 		return findState(y);
 	}
 
-	public static State findState(Variable x) {
+	public State findState(Variable x) {
 		State state = new State();
 		state.setLhs(x);
 		Iterator<State> it = states.iterator();
