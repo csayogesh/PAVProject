@@ -111,6 +111,8 @@ public class State {
 			Variable x = it.next();
 			if (x.getState() == null) {
 				rhs += x.toString();
+				if (it.hasNext())
+					rhs += ", ";
 				continue;
 			}
 			x.getState().displayLHS = false;
@@ -123,6 +125,8 @@ public class State {
 					rhs += "." + x.getMember();
 			} else
 				rhs += x.getState().toString();
+			if (it.hasNext())
+				rhs += ", ";
 		}
 		String values = "";
 		if (this.values.size() > 0) {
@@ -132,22 +136,22 @@ public class State {
 				if (i.hasNext())
 					values += ", ";
 			}
-			// values = this.values.toString();
 		}
 		String res = "";
+		String comma = "";
+		if (!rhs.equals("") && !values.equals(""))
+			comma = ", ";
 		if (lhsArr != null) {
 			for (int i = 0; i < lhsArr.length; i++) {
-				String tmp = lhsArr[i] + rhs + values + end;
-				tmp = addCommas(tmp);
+				String tmp = lhsArr[i] + rhs + comma + values + end;
 				if (i < lhsArr.length - 1)
 					tmp += "\n";
-				if (i > 0)
-					tmp = removeComma(tmp);
 				res += tmp;
 			}
 			return res;
 		}
-		return addCommas(lhs + rhs + values + end);
+
+		return (lhs + rhs + comma + values + end);
 	}
 
 	private String removeComma(String tmp) {

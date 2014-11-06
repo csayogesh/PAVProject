@@ -131,9 +131,9 @@ public class Variable {
 		if (this.member != null && this.state != null) {
 			this.state.displayLHS = false;
 			String str = this.state.toString();
-			arr = str.split("]");
+			arr = str.split(", ");
 			for (int i = 0; i < arr.length; i++)
-				arr[i] += "]." + member;
+				arr[i] += "." + member;
 		} else if (this.member != null) {
 			arr = new String[] { "" + name + "." + member };
 		}
