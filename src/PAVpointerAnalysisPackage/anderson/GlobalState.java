@@ -88,4 +88,9 @@ public class GlobalState {
 		}
 		return null;
 	}
+
+	@Override
+	public String toString() {
+		return "GlobalState [states=" + states + "]";
+	}
 }

@@ -7,6 +7,7 @@ public class AlgorithmA {
 	public static void performAnalysisOnMethod(IR x) {
 		System.out.println(x);
 		Graph graph = new Graph();
-		graph.CreateFromIR(x);
+		graph.createFromIR(x);
+		System.out.println(graph);
 	}
 }
