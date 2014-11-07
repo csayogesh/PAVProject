@@ -34,6 +34,7 @@ public class AndersonAnalysis {
 	public static void main(String[] args) {
 		performAnalysisOnMethod(null);
 	}
+
 	public static void performAnalysisOnMethod(IR ir) {
 		if (ir == null)
 			return;

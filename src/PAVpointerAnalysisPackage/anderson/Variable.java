@@ -35,7 +35,18 @@ public class Variable {
 	}
 
 	public void setName(String name) {
+		if (name.contains(":#null")) {
+			this.name = name.split(":")[0];
+			this.setValue("null");
+			return;
+		}
 		this.name = name;
+	}
+
+	private void setValue(String string) {
+		if (values.contains(string))
+			return;
+		values.add(string);
 	}
 
 	public String getMember() {
@@ -52,6 +63,8 @@ public class Variable {
 
 	@Override
 	public String toString() {
+		if (values.size() > 0)
+			return values.toString();
 		String str = "";
 		if (member != null)
 			str = "." + member;
