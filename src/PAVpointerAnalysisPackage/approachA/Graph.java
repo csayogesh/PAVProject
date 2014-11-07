@@ -31,9 +31,7 @@ public class Graph {
 				to = getNodeToLink(arr[i]);
 				if (to == null || from == null)
 					continue;
-				DirectedEdge e = new DirectedEdge();
-				e.setNode(to);
-				from.setEdge(e);
+				from.setEdge(to);
 			}
 		}
 	}

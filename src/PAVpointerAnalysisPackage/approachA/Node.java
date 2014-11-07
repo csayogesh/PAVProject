@@ -3,16 +3,20 @@ package PAVpointerAnalysisPackage.approachA;
 import java.util.Iterator;
 import java.util.LinkedList;
 
+import PAVpointerAnalysisPackage.anderson.*;
+
 public class Node {
 	public Node() {
 		super();
 		id = null;
-		edges = new LinkedList<DirectedEdge>();
+		edges = new LinkedList<Node>();
+		gs = new GlobalState();
 		marked = true;
 	}
 
 	private String id;
-	private LinkedList<DirectedEdge> edges;
+	private LinkedList<Node> edges;
+	private GlobalState gs;
 	private boolean marked;
 
 	public String getId() {
@@ -21,14 +25,6 @@ public class Node {
 
 	public void setId(String id) {
 		this.id = id;
-	}
-
-	public LinkedList<DirectedEdge> getEdges() {
-		return edges;
-	}
-
-	public void setEdges(LinkedList<DirectedEdge> edges) {
-		this.edges = edges;
 	}
 
 	public boolean isMarked() {
@@ -42,9 +38,9 @@ public class Node {
 	@Override
 	public String toString() {
 		String str = "" + id;
-		Iterator<DirectedEdge> it = edges.iterator();
+		Iterator<Node> it = edges.iterator();
 		while (it.hasNext())
-			str += "\t"+it.next().toString() + "\n";
+			str += "\t" + it.next().id + "\n";
 		return str;
 	}
 
@@ -73,7 +69,7 @@ public class Node {
 		return true;
 	}
 
-	public void setEdge(DirectedEdge e) {
+	public void setEdge(Node e) {
 		if (!edges.contains(e))
 			edges.add(e);
 	}
