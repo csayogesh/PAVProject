@@ -38,7 +38,9 @@ public class State {
 			x.setcState(state);
 			state.setRhs(x);
 		}
-		state.values = this.values;
+		Iterator<String> i = this.values.iterator();
+		while(i.hasNext())
+			state.setValue(i.next());
 		state.gs = null;
 		state.displayLHS = this.displayLHS;
 		return state;

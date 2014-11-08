@@ -3,6 +3,8 @@ package PAVpointerAnalysisPackage.approachA;
 import java.util.Iterator;
 import java.util.LinkedList;
 
+import PAVpointerAnalysisPackage.anderson.*;
+
 import com.ibm.wala.ssa.IR;
 import com.ibm.wala.ssa.SSACFG;
 
@@ -17,7 +19,6 @@ public class Graph {
 
 	public void createFromIR(IR x) {
 		SSACFG cfg = x.getControlFlowGraph();
-		System.out.println(cfg);
 		String[] arr = cfg.toString().split("\n");
 		for (int i = 0; i < arr.length; i++) {
 			if (arr[i].contains("["))
@@ -81,5 +82,58 @@ public class Graph {
 		while (it.hasNext())
 			str += it.next().toString() + "\n";
 		return str;
+	}
+
+	public void initializeStates(IR ir) {
+		String[] lines = ir.toString().split("\n");
+		boolean istart = false;
+		Node cur = null;
+		for (int i = 0; i < lines.length; i++) {
+			if (istart) {
+				if (lines[i].matches("BB[0-9]*")) {
+					cur = findNode(lines[i]);
+				} else
+					cur.getGs().setState(
+							AndersonAnalysis.fetchState(lines[i], cur.getGs()));
+			}
+			if (lines[i].equals("Instructions:"))
+				istart = true;
+		}
+
+	}
+
+	public void runKildall() {
+		boolean change = true;
+		while (change) {
+			change = false;
+			Iterator<Node> it = this.nodes.iterator();
+			while (it.hasNext()) {
+				Node node = it.next();
+				if (node == null)
+					continue;
+				if (node.isMarked()) {
+					Iterator<Node> edges = node.getEdges().iterator();
+					while (edges.hasNext()) {
+						Node child = edges.next();
+						if (child == null)
+							continue;
+						if (child.getGs().add(node.getGs())) {
+							change = true;
+							child.setMarked(true);
+							Iterator<Node> i = child.getEdges().iterator();
+							while (i.hasNext())
+								i.next().setMarked(true);
+						}
+					}
+					node.setMarked(false);
+				}
+			}
+		}
+	}
+
+	public void linkStates() {
+		Iterator<Node> it = nodes.iterator();
+		while (it.hasNext())
+			it.next().getGs().linkAllStates();
 	}
 }

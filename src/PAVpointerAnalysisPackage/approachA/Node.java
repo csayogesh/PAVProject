@@ -37,10 +37,11 @@ public class Node {
 
 	@Override
 	public String toString() {
-		String str = "" + id;
+		String str = "";
 		Iterator<Node> it = edges.iterator();
 		while (it.hasNext())
-			str += "\t" + it.next().id + "\n";
+			str += this.id + " - " + it.next().id + "\n" + this.gs.toString()
+					+ "\n";
 		return str;
 	}
 
@@ -72,5 +73,21 @@ public class Node {
 	public void setEdge(Node e) {
 		if (!edges.contains(e))
 			edges.add(e);
+	}
+
+	public GlobalState getGs() {
+		return gs;
+	}
+
+	public void setGs(GlobalState gs) {
+		this.gs = gs;
+	}
+
+	public LinkedList<Node> getEdges() {
+		return edges;
+	}
+
+	public void setEdges(LinkedList<Node> edges) {
+		this.edges = edges;
 	}
 }

@@ -11,7 +11,7 @@ public class GlobalState {
 
 	public boolean add(GlobalState gs) {
 		boolean res = false;
-		Iterator<State> it = states.iterator();
+		Iterator<State> it = gs.states.iterator();
 		while (it.hasNext())
 			try {
 				res = this.setState((State) it.next().clone());
@@ -39,8 +39,9 @@ public class GlobalState {
 		if (!states.contains(state)) {
 			this.states.add(state);
 			res = true;
-		} else
+		} else {
 			res = merge(state);
+		}
 		return res;
 	}
 
@@ -111,6 +112,13 @@ public class GlobalState {
 
 	@Override
 	public String toString() {
-		return "GlobalState [states=" + states + "]";
+		Iterator<State> it = states.iterator();
+		String str = "";
+		while (it.hasNext()) {
+			State st = it.next();
+			st.displayLHS = true;
+			str += "" + st.toString() + "\n";
+		}
+		return str;
 	}
 }

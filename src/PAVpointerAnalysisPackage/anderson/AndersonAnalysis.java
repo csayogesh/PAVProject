@@ -53,7 +53,7 @@ public class AndersonAnalysis {
 		gs.printGlobalStates();
 	}
 
-	private static State fetchState(String string, GlobalState gs) {
+	public static State fetchState(String string, GlobalState gs) {
 		State state = null;
 		if (string.contains(" = new <"))
 			state = extractNew(string, gs);
@@ -72,7 +72,7 @@ public class AndersonAnalysis {
 		return state;
 	}
 
-	private static State extractArrayload(String string, GlobalState gs) {
+	public static State extractArrayload(String string, GlobalState gs) {
 		State state = new State();
 		state.setGs(gs);
 		Variable lhs = new Variable();
@@ -87,7 +87,7 @@ public class AndersonAnalysis {
 		return state;
 	}
 
-	private static State extractArrayStore(String string, GlobalState gs) {
+	public static State extractArrayStore(String string, GlobalState gs) {
 		State state = new State();
 		state.setGs(gs);
 		Variable lhs = new Variable();
@@ -102,7 +102,7 @@ public class AndersonAnalysis {
 		return state;
 	}
 
-	private static State extractPhi(String string, GlobalState gs) {
+	public static State extractPhi(String string, GlobalState gs) {
 		State state = new State();
 		state.setGs(gs);
 		String[] arr = string.split(" ");
@@ -124,7 +124,7 @@ public class AndersonAnalysis {
 		return state;
 	}
 
-	private static State extractGetfield(String string, GlobalState gs) {
+	public static State extractGetfield(String string, GlobalState gs) {
 		State state = new State();
 		state.setGs(gs);
 		String[] arr = string.split(" ");
@@ -140,7 +140,7 @@ public class AndersonAnalysis {
 		return state;
 	}
 
-	private static State extractPutfield(String string, GlobalState gs) {
+	public static State extractPutfield(String string, GlobalState gs) {
 		State state = new State();
 		state.setGs(gs);
 		String[] arr = string.split(" ");
@@ -156,7 +156,7 @@ public class AndersonAnalysis {
 		return state;
 	}
 
-	private static State extractNew(String string, GlobalState gs) {
+	public static State extractNew(String string, GlobalState gs) {
 		State state = new State();
 		state.setGs(gs);
 		String[] arr = string.split(" ");
