@@ -9,6 +9,18 @@ public class GlobalState {
 		this.states = new LinkedList<State>();
 	}
 
+	public boolean add(GlobalState gs) {
+		boolean res = false;
+		Iterator<State> it = states.iterator();
+		while (it.hasNext())
+			try {
+				res = this.setState((State) it.next().clone());
+			} catch (CloneNotSupportedException e) {
+				e.printStackTrace();
+			}
+		return res;
+	}
+
 	public GlobalState(LinkedList<State> states) {
 		super();
 		this.states = states;
@@ -20,25 +32,33 @@ public class GlobalState {
 		return states;
 	}
 
-	public void setState(State state) {
+	public boolean setState(State state) {
 		if (state == null)
-			return;
-		if (!states.contains(state))
+			return false;
+		boolean res = false;
+		if (!states.contains(state)) {
 			this.states.add(state);
-		else
-			merge(state);
+			res = true;
+		} else
+			res = merge(state);
+		return res;
 	}
 
-	private void merge(State state) {
+	private boolean merge(State state) {
 		Iterator<State> x = states.iterator();
+		boolean res = false;
 		while (x.hasNext()) {
 			State obj = x.next();
 			if (obj.equals(state)) {
-				obj.setValues(state.getValues());
-				obj.setRhs(state.getRhs());
+				res = obj.setValues(state.getValues());
+				if (res)
+					obj.setRhs(state.getRhs());
+				else
+					res = obj.setRhs(state.getRhs());
 				break;
 			}
 		}
+		return res;
 	}
 
 	public void printGlobalStates() {

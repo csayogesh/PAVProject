@@ -27,6 +27,23 @@ public class State {
 	private GlobalState gs;
 	public boolean displayLHS;
 
+	@Override
+	protected Object clone() throws CloneNotSupportedException {
+		State state = new State();
+		state.lhs = (Variable) lhs.clone();
+		state.lhs.setcState(state);
+		Iterator<Variable> it = rhs.iterator();
+		while (it.hasNext()) {
+			Variable x = (Variable) it.next().clone();
+			x.setcState(state);
+			state.setRhs(x);
+		}
+		state.values = this.values;
+		state.gs = null;
+		state.displayLHS = this.displayLHS;
+		return state;
+	}
+
 	public Variable getLhs() {
 		return lhs;
 	}
@@ -39,12 +56,15 @@ public class State {
 		return values;
 	}
 
-	public void setValue(String string) {
-		// TODO Auto-generated method stub
+	public boolean setValue(String string) {
+		boolean res = false;
 		if (values.contains(string))
-			System.out.println("This string is already in this state");
-		else
+			;
+		else {
+			res = true;
 			values.add(string);
+		}
+		return res;
 	}
 
 	@Override
@@ -72,26 +92,33 @@ public class State {
 		return true;
 	}
 
-	public void setValues(LinkedList<String> values2) {
+	public boolean setValues(LinkedList<String> values2) {
 		Iterator<String> it = values2.iterator();
+		boolean res = false;
 		while (it.hasNext()) {
-			setValue(it.next());
+			res = setValue(it.next());
 		}
+		return res;
 	}
 
-	public void setRhs(Variable rhs1) {
-		if (!rhs.contains(rhs1))
+	public boolean setRhs(Variable rhs1) {
+		if (!rhs.contains(rhs1)) {
 			rhs.add(rhs1);
+			return true;
+		}
+		return false;
 	}
 
 	public LinkedList<Variable> getRhs() {
 		return rhs;
 	}
 
-	public void setRhs(LinkedList<Variable> rhs) {
+	public boolean setRhs(LinkedList<Variable> rhs) {
 		Iterator<Variable> it = rhs.iterator();
+		boolean res = false;
 		while (it.hasNext())
-			setRhs(it.next());
+			res = setRhs(it.next());
+		return res;
 	}
 
 	@Override
@@ -167,4 +194,5 @@ public class State {
 	public void setGs(GlobalState gs) {
 		this.gs = gs;
 	}
+
 }

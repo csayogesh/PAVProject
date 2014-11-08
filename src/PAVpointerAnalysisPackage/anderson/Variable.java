@@ -160,4 +160,16 @@ public class Variable {
 	public void setcState(State cState) {
 		this.cState = cState;
 	}
+
+	@Override
+	protected Object clone() throws CloneNotSupportedException {
+		Variable v = new Variable();
+		v.name = this.name;
+		v.member = this.member;
+		v.values = this.values;
+		v.displayMember = this.displayMember;
+		v.state = null;
+		v.cState = null;
+		return v;
+	}
 }
