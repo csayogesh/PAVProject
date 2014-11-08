@@ -74,7 +74,7 @@ public class PAVPointerAnalysis {
 		 */
 		IR x = setup.getIR(setup.getTargetNode());
 		AndersonAnalysis.performAnalysisOnMethod(x);
-		AlgorithmA.performAnalysisOnMethod(x);
+		//AlgorithmA.performAnalysisOnMethod(x);
 
 		/*
 		 * Create appropriate objects/make appropriate function calls here to

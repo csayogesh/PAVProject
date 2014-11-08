@@ -20,14 +20,14 @@ public class Variable {
 		this.member = null;
 		this.values = new LinkedList<String>();
 		this.state = null;
+		this.cState = null;
 		this.displayMember = false;
 	}
 
 	private String name;
 	private String member;
 	private LinkedList<String> values;
-	private State state;
-	private GlobalState gs;
+	private State state, cState;
 	public boolean displayMember;
 
 	public String getName() {
@@ -105,7 +105,7 @@ public class Variable {
 			Variable x = new Variable();
 			x.setName(other.getName());
 			boolean old = this.displayMember;
-			State state = gs.findLhsState(this);
+			State state = cState.getGs().findLhsState(this);
 			this.displayMember = old;
 			Iterator<Variable> it = null;
 			if (state != null)
@@ -153,11 +153,11 @@ public class Variable {
 		return arr;
 	}
 
-	public GlobalState getGs() {
-		return gs;
+	public State getcState() {
+		return cState;
 	}
 
-	public void setGs(GlobalState gs) {
-		this.gs = gs;
+	public void setcState(State cState) {
+		this.cState = cState;
 	}
 }

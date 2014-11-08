@@ -74,13 +74,14 @@ public class AndersonAnalysis {
 
 	private static State extractArrayload(String string, GlobalState gs) {
 		State state = new State();
+		state.setGs(gs);
 		Variable lhs = new Variable();
-		lhs.setGs(gs);
+		lhs.setcState(state);
 		String[] arr = string.split(" ");
 		lhs.setName(arr[3]);
 		state.setLhs(lhs);
 		Variable rhs1 = new Variable();
-		rhs1.setGs(gs);
+		rhs1.setcState(state);
 		rhs1.setName(arr[6].split("\\[")[0]);
 		state.setRhs(rhs1);
 		return state;
@@ -88,13 +89,14 @@ public class AndersonAnalysis {
 
 	private static State extractArrayStore(String string, GlobalState gs) {
 		State state = new State();
+		state.setGs(gs);
 		Variable lhs = new Variable();
-		lhs.setGs(gs);
+		lhs.setcState(state);
 		String[] arr = string.split(" ");
 		lhs.setName(arr[4].split("\\[")[0]);
 		state.setLhs(lhs);
 		Variable rhs1 = new Variable();
-		rhs1.setGs(gs);
+		rhs1.setcState(state);
 		rhs1.setName(arr[6]);
 		state.setRhs(rhs1);
 		return state;
@@ -102,9 +104,10 @@ public class AndersonAnalysis {
 
 	private static State extractPhi(String string, GlobalState gs) {
 		State state = new State();
+		state.setGs(gs);
 		String[] arr = string.split(" ");
 		Variable lhs = new Variable();
-		lhs.setGs(gs);
+		lhs.setcState(state);
 		lhs.setName(arr[11]);
 		state.setLhs(lhs);
 
@@ -113,7 +116,7 @@ public class AndersonAnalysis {
 			if (arr2[i].contains("#"))
 				continue;
 			Variable rhs1 = new Variable();
-			rhs1.setGs(gs);
+			rhs1.setcState(state);
 			rhs1.setName(arr2[i]);
 			state.setRhs(rhs1);
 		}
@@ -123,13 +126,14 @@ public class AndersonAnalysis {
 
 	private static State extractGetfield(String string, GlobalState gs) {
 		State state = new State();
+		state.setGs(gs);
 		String[] arr = string.split(" ");
 		Variable lhs = new Variable();
-		lhs.setGs(gs);
+		lhs.setcState(state);
 		lhs.setName(arr[3]);
 		state.setLhs(lhs);
 		Variable rhs1 = new Variable();
-		rhs1.setGs(gs);
+		rhs1.setcState(state);
 		rhs1.setName(arr[12].split("\\(")[0]);
 		rhs1.setMember(arr[9].split(",")[0]);
 		state.setRhs(rhs1);
@@ -138,14 +142,15 @@ public class AndersonAnalysis {
 
 	private static State extractPutfield(String string, GlobalState gs) {
 		State state = new State();
+		state.setGs(gs);
 		String[] arr = string.split(" ");
 		Variable lhs = new Variable();
-		lhs.setGs(gs);
+		lhs.setcState(state);
 		lhs.setName(arr[4]);
 		lhs.setMember(arr[10].split(",")[0]);
 		state.setLhs(lhs);
 		Variable rhs1 = new Variable();
-		rhs1.setGs(gs);
+		rhs1.setcState(state);
 		rhs1.setName(arr[6]);
 		state.setRhs(rhs1);
 		return state;
@@ -153,9 +158,10 @@ public class AndersonAnalysis {
 
 	private static State extractNew(String string, GlobalState gs) {
 		State state = new State();
+		state.setGs(gs);
 		String[] arr = string.split(" ");
 		Variable lhs = new Variable();
-		lhs.setGs(gs);
+		lhs.setcState(state);
 		lhs.setName(arr[3]);
 		state.setLhs(lhs);
 		state.setValue("new " + arr[0]);

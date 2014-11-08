@@ -9,6 +9,7 @@ public class State {
 		this.lhs = null;
 		this.rhs = new LinkedList<Variable>();
 		this.values = new LinkedList<String>();
+		this.gs = null;
 		this.displayLHS = true;
 	}
 
@@ -23,6 +24,7 @@ public class State {
 	private Variable lhs;
 	private LinkedList<Variable> rhs;
 	private LinkedList<String> values;
+	private GlobalState gs;
 	public boolean displayLHS;
 
 	public Variable getLhs() {
@@ -153,8 +155,16 @@ public class State {
 
 		return (lhs + rhs + comma + values + end);
 	}
+
 	public static void main(String[] args) {
 		new State().toString();
 	}
-}
 
+	public GlobalState getGs() {
+		return gs;
+	}
+
+	public void setGs(GlobalState gs) {
+		this.gs = gs;
+	}
+}
