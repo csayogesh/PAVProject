@@ -9,8 +9,9 @@ public class AlgorithmA {
 		graph.createFromIR(x);
 		graph.initializeStates(x);
 		graph.runKildall();
+		graph.removeUnelatedStates();
 		graph.linkStates();
 		System.out.println("Pointer Analysis Using Algorithm A");
-		System.out.println(graph.toString());
+		System.out.println(graph);
 	}
 }

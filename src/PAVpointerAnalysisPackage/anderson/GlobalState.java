@@ -125,4 +125,19 @@ public class GlobalState {
 		}
 		return str;
 	}
+
+	public State removeUnrelatedStates() {
+		Iterator<State> it = states.iterator();
+		while (it.hasNext()) {
+			State s = it.next();
+			Iterator<Variable> i = s.getRhs().iterator();
+			while (i.hasNext()) {
+				if (findState(i.next()) == null) {
+					this.states.remove(s);
+					return s;
+				}
+			}
+		}
+		return null;
+	}
 }

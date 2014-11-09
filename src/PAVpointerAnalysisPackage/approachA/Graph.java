@@ -103,38 +103,68 @@ public class Graph {
 
 	}
 
-	public void runKildall() {
-		boolean change = true;
-		while (change) {
-			change = false;
-			Iterator<Node> it = this.nodes.iterator();
-			while (it.hasNext()) {
-				Node node = it.next();
-				if (node == null)
-					continue;
-				if (node.isMarked()) {
-					Iterator<Node> edges = node.getEdges().iterator();
-					while (edges.hasNext()) {
-						Node child = edges.next();
-						if (child == null)
-							continue;
-						if (child.getGs().add(node.getGs())) {
-							change = true;
-							child.setMarked(true);
-							Iterator<Node> i = child.getEdges().iterator();
-							while (i.hasNext())
-								i.next().setMarked(true);
-						}
+	public boolean kildallIterateOnce(boolean b) {
+		boolean change = false;
+		Iterator<Node> it = this.nodes.iterator();
+		while (it.hasNext()) {
+			Node node = it.next();
+			if (node == null)
+				continue;
+			if (node.isMarked()) {
+				Iterator<Node> edges = node.getEdges().iterator();
+				while (edges.hasNext()) {
+					Node child = edges.next();
+					if (child == null)
+						continue;
+					if (child.getGs().add(node.getGs())) {
+						change = true;
+						child.setMarked(true);
+						Iterator<Node> i = child.getEdges().iterator();
+						while (i.hasNext())
+							i.next().setMarked(true);
 					}
-					node.setMarked(false);
+					if (b)
+						child.getGs().removeUnrelatedStates();
 				}
+				node.setMarked(false);
 			}
 		}
+		return change;
+	}
+
+	public void runKildall() {
+		boolean change = true;
+		setAllNodesMarked();
+		while (change) {
+			change = kildallIterateOnce(false);
+		}
+	}
+
+	private void setAllNodesMarked() {
+		Iterator<Node> it = nodes.iterator();
+		while (it.hasNext())
+			it.next().setMarked(true);
 	}
 
 	public void linkStates() {
 		Iterator<Node> it = nodes.iterator();
 		while (it.hasNext())
 			it.next().getGs().linkAllStates();
+	}
+
+	public void removeUnelatedStates() {
+		Iterator<Node> it = nodes.iterator();
+		while (it.hasNext()) {
+			State x;
+			while ((x = it.next().getGs().removeUnrelatedStates()) != null) {
+				this.removeState(x);
+			}
+		}
+	}
+
+	private void removeState(State x) {
+		Iterator<Node> it = nodes.iterator();
+		while (it.hasNext())
+			it.next().getGs().getStates().remove(x);
 	}
 }
