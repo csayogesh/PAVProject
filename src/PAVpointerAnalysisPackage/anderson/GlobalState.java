@@ -14,7 +14,9 @@ public class GlobalState {
 		Iterator<State> it = gs.states.iterator();
 		while (it.hasNext())
 			try {
-				res = this.setState((State) it.next().clone());
+				State state = (State) it.next().clone();
+				state.setGs(this);
+				res = this.setState(state);
 			} catch (CloneNotSupportedException e) {
 				e.printStackTrace();
 			}
@@ -37,9 +39,11 @@ public class GlobalState {
 			return false;
 		boolean res = false;
 		if (!states.contains(state)) {
+			state.setGs(this);
 			this.states.add(state);
 			res = true;
 		} else {
+			state.setGs(this);
 			res = merge(state);
 		}
 		return res;

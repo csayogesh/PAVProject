@@ -92,9 +92,10 @@ public class Graph {
 			if (istart) {
 				if (lines[i].matches("BB[0-9]*")) {
 					cur = findNode(lines[i]);
-				} else
+				} else {
 					cur.getGs().setState(
 							AndersonAnalysis.fetchState(lines[i], cur.getGs()));
+				}
 			}
 			if (lines[i].equals("Instructions:"))
 				istart = true;

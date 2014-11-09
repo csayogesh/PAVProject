@@ -105,18 +105,19 @@ public class Variable {
 			Variable x = new Variable();
 			x.setName(other.getName());
 			boolean old = this.displayMember;
-			if (other.getState() != null && other.getState().getGs() != null) {
-				State state = other.getState().getGs().findLhsState(this);
-				this.displayMember = old;
-				Iterator<Variable> it = null;
-				if (state != null)
-					it = state.getRhs().iterator();
-				if (it != null)
-					while (it.hasNext())
-						if (it.next().equals(x))
-							return true;
-			}
+			// if (other.getState() != null && other.getState().getGs() != null)
+			// {
+			State state = cState.getGs().findLhsState(this);
+			this.displayMember = old;
+			Iterator<Variable> it = null;
+			if (state != null)
+				it = state.getRhs().iterator();
+			if (it != null)
+				while (it.hasNext())
+					if (it.next().equals(x))
+						return true;
 		}
+		// }
 		if (name == null) {
 			if (other.name != null)
 				return false;
