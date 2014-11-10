@@ -164,7 +164,12 @@ public class Graph {
 
 	private void removeState(State x) {
 		Iterator<Node> it = nodes.iterator();
-		while (it.hasNext())
-			it.next().getGs().getStates().remove(x);
+		while (it.hasNext()) {
+			Node y = it.next();
+			y.getGs().getStates().remove(x);
+			Iterator<State> i = y.getGs().getStates().iterator();
+			while (i.hasNext())
+				i.next().getRhs().remove(x.getLhs());
+		}
 	}
 }
