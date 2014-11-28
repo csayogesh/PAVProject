@@ -39,7 +39,7 @@ public class State {
 			state.setRhs(x);
 		}
 		Iterator<String> i = this.values.iterator();
-		while(i.hasNext())
+		while (i.hasNext())
 			state.setValue(i.next());
 		state.gs = null;
 		state.displayLHS = this.displayLHS;
@@ -174,6 +174,8 @@ public class State {
 			comma = ", ";
 		if (lhsArr != null) {
 			for (int i = 0; i < lhsArr.length; i++) {
+				if (lhsArr[i].contains("null"))
+					continue;
 				String tmp = lhsArr[i] + rhs + comma + values + end;
 				if (i < lhsArr.length - 1)
 					tmp += "\n";

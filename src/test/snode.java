@@ -2,6 +2,6 @@ package test;
 
 
 public class snode {
-	data info;
+	data data1,data2;
 	snode next;
 }

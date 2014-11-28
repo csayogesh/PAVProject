@@ -148,6 +148,7 @@ public class Variable {
 			String str = this.state.toString();
 			arr = str.split(", ");
 			for (int i = 0; i < arr.length; i++)
+				// if (!arr[i].equals("[null]"))
 				arr[i] += "." + member;
 		} else if (this.member != null) {
 			arr = new String[] { "" + name + "." + member };
