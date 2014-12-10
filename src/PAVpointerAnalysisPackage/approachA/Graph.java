@@ -14,6 +14,7 @@ public class Graph {
 
 	public Graph() {
 		super();
+		ir = null;
 		nodes = new LinkedList<Node>();
 	}
 
@@ -23,6 +24,7 @@ public class Graph {
 
 	private LinkedList<Node> nodes;
 	private String method;
+	private IR ir;
 	private static LinkedList<Graph> methodGraphs;
 
 	public static void printMethods() {
@@ -53,12 +55,17 @@ public class Graph {
 
 	private void addNewMethod(IR ir, String method) {
 		Graph graph = new Graph();
+		graph.setIr(ir);
 		graph.setMethod(method);
 		if (!methodGraphs.contains(graph)) {
 			graph.createFromIR(ir);
 			methodGraphs.add(graph);
 		}
 		return;
+	}
+
+	private void setIr(IR ir) {
+		this.ir = ir;
 	}
 
 	public void createFromIR(IR x) {
@@ -169,7 +176,6 @@ public class Graph {
 			if (lines[i].equals("Instructions:"))
 				istart = true;
 		}
-
 	}
 
 	public boolean kildallIterateOnce(boolean b) {
@@ -239,6 +245,14 @@ public class Graph {
 			Iterator<State> i = y.getGs().getStates().iterator();
 			while (i.hasNext())
 				i.next().getRhs().remove(x.getLhs());
+		}
+	}
+
+	public static void initializeMethodGraphs() {
+		Iterator<Graph> it = methodGraphs.iterator();
+		while (it.hasNext()) {
+			Graph x = it.next();
+			x.initializeStates(x.ir);
 		}
 	}
 
