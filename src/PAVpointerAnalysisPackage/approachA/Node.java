@@ -14,10 +14,10 @@ public class Node {
 		marked = true;
 	}
 
-	private String id;
+	private String id, functionName;
 	private LinkedList<Node> edges;
 	private GlobalState gs;
-	private boolean marked;
+	private boolean marked, callNode;
 
 	public String getId() {
 		return id;

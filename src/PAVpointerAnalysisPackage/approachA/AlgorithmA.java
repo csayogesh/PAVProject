@@ -1,5 +1,7 @@
 package PAVpointerAnalysisPackage.approachA;
 
+import PAVpointerAnalysisPackage.SetUpAnalysis;
+
 import com.ibm.wala.ssa.IR;
 
 public class AlgorithmA {
@@ -13,5 +15,10 @@ public class AlgorithmA {
 		graph.linkStates();
 		System.out.println("Pointer Analysis Using Algorithm A");
 		System.out.println(graph);
+	}
+
+	public static void performIPACallString(SetUpAnalysis setup) {
+		Graph graph = new Graph();
+		graph.createIPGFromIR(setup);
 	}
 }

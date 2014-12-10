@@ -14,6 +14,7 @@ import PAVpointerAnalysisPackage.PAVPointerAnalysis;
 import PAVpointerAnalysisPackage.SetUpAnalysis;
 import PAVpointerAnalysisPackage.anderson.AndersonAnalysis;
 import PAVpointerAnalysisPackage.approachA.AlgorithmA;
+import PAVpointerAnalysisPackage.approachA.Graph;
 
 import com.ibm.wala.classLoader.IClass;
 import com.ibm.wala.classLoader.IField;
@@ -72,9 +73,11 @@ public class PAVPointerAnalysis {
 		 * will compute the call graph for the given program, and print out the
 		 * nodes. Feel free to erase this call, or use it otherwise.
 		 */
-		IR x = setup.getIR(setup.getTargetNode());
-		AlgorithmA.performAnalysisOnMethod(x);
-		AndersonAnalysis.performAnalysisOnMethod(x);
+		// IR x = setup.getIR(setup.getTargetNode());
+		AlgorithmA.performIPACallString(setup);
+		Graph.printMethods();
+		// AlgorithmA.performAnalysisOnMethod(x);
+		// AndersonAnalysis.performAnalysisOnMethod(x);
 
 		/*
 		 * Create appropriate objects/make appropriate function calls here to

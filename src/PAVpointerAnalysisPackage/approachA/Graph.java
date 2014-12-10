@@ -3,8 +3,10 @@ package PAVpointerAnalysisPackage.approachA;
 import java.util.Iterator;
 import java.util.LinkedList;
 
+import PAVpointerAnalysisPackage.SetUpAnalysis;
 import PAVpointerAnalysisPackage.anderson.*;
 
+import com.ibm.wala.ipa.callgraph.CGNode;
 import com.ibm.wala.ssa.IR;
 import com.ibm.wala.ssa.SSACFG;
 
@@ -15,7 +17,49 @@ public class Graph {
 		nodes = new LinkedList<Node>();
 	}
 
+	static {
+		methodGraphs = new LinkedList<Graph>();
+	}
+
 	private LinkedList<Node> nodes;
+	private String method;
+	private static LinkedList<Graph> methodGraphs;
+
+	public static void printMethods() {
+		Iterator<Graph> it = methodGraphs.iterator();
+		while (it.hasNext())
+			System.out.println(it.next());
+	}
+
+	public void createIPGFromIR(SetUpAnalysis setup) {
+		IR main = setup.getTargetNode(setup.getAnalysisMethod(),
+				setup.getAnalysisClass()).getIR();
+		addNewMethod(main, setup.getAnalysisMethod());
+		String[] arr = main.toString().split("\n");
+		for (int i = 0; i < arr.length; i++) {
+			if (arr[i].contains("invokestatic")) {
+				String arr1[] = arr[i].split(" ");
+				String method = arr1[9].split("\\(")[0];
+				CGNode t = setup
+						.getTargetNode(method, setup.getAnalysisClass());
+				addNewMethod(t.getIR(), method);
+			}
+		}
+	}
+
+	private void setMethod(String method) {
+		this.method = method;
+	}
+
+	private void addNewMethod(IR ir, String method) {
+		Graph graph = new Graph();
+		graph.setMethod(method);
+		if (!methodGraphs.contains(graph)) {
+			graph.createFromIR(ir);
+			methodGraphs.add(graph);
+		}
+		return;
+	}
 
 	public void createFromIR(IR x) {
 		SSACFG cfg = x.getControlFlowGraph();
@@ -77,11 +121,36 @@ public class Graph {
 
 	@Override
 	public String toString() {
-		String str = "";
+		String str = "" + method + "\n";
 		Iterator<Node> it = nodes.iterator();
 		while (it.hasNext())
 			str += it.next().toString() + "\n";
 		return str;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((method == null) ? 0 : method.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Graph other = (Graph) obj;
+		if (method == null) {
+			if (other.method != null)
+				return false;
+		} else if (!method.equals(other.method))
+			return false;
+		return true;
 	}
 
 	public void initializeStates(IR ir) {
@@ -172,4 +241,5 @@ public class Graph {
 				i.next().getRhs().remove(x.getLhs());
 		}
 	}
+
 }

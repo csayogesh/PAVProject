@@ -36,6 +36,47 @@ public class SetUpAnalysis {
 	private String classpath;
 	private String mainClass;
 	private String analysisClass;
+
+	public String getClasspath() {
+		return classpath;
+	}
+
+	public String getMainClass() {
+		return mainClass;
+	}
+
+	public String getAnalysisClass() {
+		return analysisClass;
+	}
+
+	public String getAnalysisMethod() {
+		return analysisMethod;
+	}
+
+	public AnalysisScope getScope() {
+		return scope;
+	}
+
+	public ClassHierarchy getCh() {
+		return ch;
+	}
+
+	public Iterable<Entrypoint> getEntrypoints() {
+		return entrypoints;
+	}
+
+	public AnalysisOptions getOptions() {
+		return options;
+	}
+
+	public CallGraphBuilder getBuilder() {
+		return builder;
+	}
+
+	public CallGraph getCg() {
+		return cg;
+	}
+
 	private String analysisMethod;
 
 	// START: NO CHANGE REGION
@@ -126,7 +167,7 @@ public class SetUpAnalysis {
 	 * 
 	 * @return
 	 */
-	public CGNode getTargetNode() {
+	public CGNode getTargetNode(String method, String mClass) {
 		Iterator<CGNode> nodes = cg.iterator();
 		CGNode t = null;
 
@@ -134,8 +175,8 @@ public class SetUpAnalysis {
 			CGNode node = nodes.next();
 			String str = node.toString();
 			if (str.indexOf("Application") != -1
-					&& str.indexOf(analysisMethod + "(") != -1
-					&& str.indexOf(analysisClass) != -1) {
+					&& str.indexOf(method + "(") != -1
+					&& str.indexOf(mClass) != -1) {
 				t = node;
 			}
 		}
@@ -143,18 +184,20 @@ public class SetUpAnalysis {
 	}
 
 	public IR getIR(CGNode node) {
-		if(node == null)
+		if (node == null)
 			return null;
 		IR ir = node.getIR();
 		try {
 			String args[] = { "-appJar", classpath, "-sig",
 					ir.getMethod().getSignature() };
 			PDFWalaIR.main(args);
-		} catch (Exception e) {}
+		} catch (Exception e) {
+		}
 		return ir;
 	}
 
 	public SSACFG getCFG() {
-		return getIR(getTargetNode()).getControlFlowGraph();
+		return getIR(getTargetNode(analysisClass, analysisClass))
+				.getControlFlowGraph();
 	}
 }
