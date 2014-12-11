@@ -9,6 +9,7 @@ import PAVpointerAnalysisPackage.anderson.*;
 import com.ibm.wala.ipa.callgraph.CGNode;
 import com.ibm.wala.ssa.IR;
 import com.ibm.wala.ssa.SSACFG;
+import com.ibm.wala.ssa.SSAInstruction;
 
 public class Graph {
 
@@ -132,6 +133,7 @@ public class Graph {
 		Iterator<Node> it = nodes.iterator();
 		while (it.hasNext())
 			str += it.next().toString() + "\n";
+		System.out.println(ir);
 		return str;
 	}
 
@@ -253,7 +255,35 @@ public class Graph {
 		while (it.hasNext()) {
 			Graph x = it.next();
 			x.initializeStates(x.ir);
+			x.createReturnVars();
 		}
 	}
 
+	private void createReturnVars() {
+		String[] lines = ir.toString().split("\n");
+		boolean istart = false;
+		Node cur = null;
+		for (int i = 0; i < lines.length; i++) {
+			if (istart) {
+				if (lines[i].matches("BB[0-9]*")) {
+					cur = findNode(lines[i]);
+				} else {
+					if (lines[i].contains("return"))
+						cur.setReturnVar(lines[i].split(" ")[4]);
+				}
+			}
+			if (lines[i].equals("Instructions:"))
+				istart = true;
+		}
+	}
+
+	public static void initializeCallLinks() {
+		Iterator<Graph> it = methodGraphs.iterator();
+		while (it.hasNext()) {
+			Graph x = it.next();
+			Iterator<SSAInstruction> it1 = x.ir.iterateAllInstructions();
+			while (it1.hasNext())
+				System.out.println();
+		}
+	}
 }

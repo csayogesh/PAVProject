@@ -12,12 +12,13 @@ public class Node {
 		edges = new LinkedList<Node>();
 		gs = new GlobalState();
 		marked = true;
+		returnVar = null;
 	}
 
-	private String id, functionName;
+	private String id, returnVar;
 	private LinkedList<Node> edges;
 	private GlobalState gs;
-	private boolean marked, callNode;
+	private boolean marked;
 
 	public String getId() {
 		return id;
@@ -89,5 +90,9 @@ public class Node {
 
 	public void setEdges(LinkedList<Node> edges) {
 		this.edges = edges;
+	}
+
+	public void setReturnVar(String string) {
+		returnVar = string;
 	}
 }
