@@ -2,6 +2,8 @@ package PAVpointerAnalysisPackage.anderson;
 
 import java.util.Iterator;
 
+import PAVpointerAnalysisPackage.approachA.InvokeMethod;
+
 import com.ibm.wala.classLoader.IClass;
 import com.ibm.wala.classLoader.IField;
 import com.ibm.wala.classLoader.IMethod;
@@ -69,6 +71,30 @@ public class AndersonAnalysis {
 			state = extractArrayStore(string, gs);
 		else if (string.contains("arrayload"))
 			state = extractArrayload(string, gs);
+		else if (string.contains("invokestatic"))
+			state = extractInvokeStatic(string, gs);
+		return state;
+	}
+
+	private static State extractInvokeStatic(String string, GlobalState gs) {
+		InvokeMethod state = new InvokeMethod();
+		state.setGs(gs);
+		int arg, m, lhs;
+		String arr1[] = string.split(" ");
+		if (string.contains("=")) {
+			m = 9;
+			arg = 11;
+			Variable v = new Variable();
+			v.setName(arr1[3]);
+			state.setLhs(v);
+			System.out.println("Hi yogesh you are right");
+		} else {
+			arg = 9;
+			m = 7;
+		}
+		state.setArguments(arr1[arg].split(","));
+		state.setMethod(arr1[m].split("\\(")[0]);
+		state.setLineNo(arr1[0]);
 		return state;
 	}
 

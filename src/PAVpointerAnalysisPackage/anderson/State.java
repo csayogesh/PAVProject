@@ -21,10 +21,10 @@ public class State {
 		this.values = values;
 	}
 
-	private Variable lhs;
-	private LinkedList<Variable> rhs;
-	private LinkedList<String> values;
-	private GlobalState gs;
+	protected Variable lhs;
+	protected LinkedList<Variable> rhs;
+	protected LinkedList<String> values;
+	protected GlobalState gs;
 	public boolean displayLHS;
 
 	@Override
