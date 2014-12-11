@@ -31,15 +31,11 @@ class TestCases {
 
 	void sPrint(snode l) {
 		for (int i = 0; i < 4; i++) {
-			//System.out.println(l.info);
+			// System.out.println(l.info);
 			l = l.next;
 		}
 	}
 
 	// main method
-	public static void main(String args[]) {
-		TestCases t = new TestCases();
-		snode l = t.createSingleLinkList();
-	}
 
 }

@@ -33,9 +33,6 @@ import com.ibm.wala.ssa.analysis.ExplodedControlFlowGraph;
 
 @SuppressWarnings("unused")
 public class AndersonAnalysis {
-	public static void main(String[] args) {
-		performAnalysisOnMethod(null);
-	}
 
 	public static void performAnalysisOnMethod(IR ir) {
 		if (ir == null)
@@ -73,7 +70,14 @@ public class AndersonAnalysis {
 			state = extractArrayload(string, gs);
 		else if (string.contains("invokestatic"))
 			state = extractInvokeStatic(string, gs);
+		// else if (string.contains("return"))
+		// state = extractReturn(string, gs);
 		return state;
+	}
+
+	private static State extractReturn(String string, GlobalState gs) {
+		System.out.println(string);
+		return new State();
 	}
 
 	private static State extractInvokeStatic(String string, GlobalState gs) {
@@ -81,14 +85,14 @@ public class AndersonAnalysis {
 		state.setGs(gs);
 		int arg, m, lhs;
 		String arr1[] = string.split(" ");
-		if (string.contains("=")) {
+		Variable v = new Variable();
+		state.setLhs(v);
+		if (string.contains(" = invokestatic <")) {
 			m = 9;
 			arg = 11;
-			Variable v = new Variable();
 			v.setName(arr1[3]);
-			state.setLhs(v);
-			System.out.println("Hi yogesh you are right");
 		} else {
+			v.setName(" ");
 			arg = 9;
 			m = 7;
 		}
