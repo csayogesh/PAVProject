@@ -195,7 +195,7 @@ public class AndersonAnalysis {
 		lhs.setcState(state);
 		lhs.setName(arr[3]);
 		state.setLhs(lhs);
-		state.setValue("new " + arr[0]);
+		state.setValue("new" + arr[0] + "_" + gs.getCallString());
 		return state;
 	}
 }

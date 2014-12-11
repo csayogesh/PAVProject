@@ -23,6 +23,10 @@ public class Graph {
 		methodGraphs = new LinkedList<Graph>();
 	}
 
+	public String getMethod() {
+		return method;
+	}
+
 	private LinkedList<Node> nodes;
 	private String method;
 	private IR ir;
@@ -133,7 +137,6 @@ public class Graph {
 		Iterator<Node> it = nodes.iterator();
 		while (it.hasNext())
 			str += it.next().toString() + "\n";
-		System.out.println(ir);
 		return str;
 	}
 
@@ -180,7 +183,7 @@ public class Graph {
 		}
 	}
 
-	public boolean kildallIterateOnce(boolean b) {
+	public boolean kildallIterateOnce(boolean b, String callString) {
 		boolean change = false;
 		Iterator<Node> it = this.nodes.iterator();
 		while (it.hasNext()) {
@@ -193,7 +196,7 @@ public class Graph {
 					Node child = edges.next();
 					if (child == null)
 						continue;
-					if (child.getGs().add(node.getGs())) {
+					if (child.getGs(callString).add(node.getGs(callString))) {
 						change = true;
 						child.setMarked(true);
 						Iterator<Node> i = child.getEdges().iterator();
@@ -209,11 +212,19 @@ public class Graph {
 		return change;
 	}
 
+	private void runKildallCallString(String callString) {
+		boolean change = true;
+		setAllNodesMarked();
+		while (change) {
+			change = kildallIterateOnce(false, callString);
+		}
+	}
+
 	public void runKildall() {
 		boolean change = true;
 		setAllNodesMarked();
 		while (change) {
-			change = kildallIterateOnce(false);
+			change = kildallIterateOnce(false, "");
 		}
 	}
 
@@ -286,4 +297,14 @@ public class Graph {
 				System.out.println();
 		}
 	}
+
+	public static void runKildall(String analysisMethod) {
+		Iterator<Graph> it = methodGraphs.iterator();
+		while (it.hasNext()) {
+			Graph g = it.next();
+			if (g.getMethod().equals(analysisMethod))
+				g.runKildallCallString("main0");
+		}
+	}
+
 }

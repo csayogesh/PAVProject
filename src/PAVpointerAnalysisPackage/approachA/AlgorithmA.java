@@ -21,5 +21,6 @@ public class AlgorithmA {
 		Graph graph = new Graph();
 		graph.createIPGFromIR(setup);
 		Graph.initializeMethodGraphs();
+		Graph.runKildall(setup.getAnalysisMethod());
 	}
 }

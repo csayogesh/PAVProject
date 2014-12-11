@@ -10,6 +10,7 @@ public class Node {
 		super();
 		id = null;
 		edges = new LinkedList<Node>();
+		cs = new LinkedList<GlobalState>();
 		gs = new GlobalState();
 		marked = true;
 		returnVar = null;
@@ -18,10 +19,22 @@ public class Node {
 	private String id, returnVar;
 	private LinkedList<Node> edges;
 	private GlobalState gs;
+	private LinkedList<GlobalState> cs;
 	private boolean marked;
 
 	public String getId() {
 		return id;
+	}
+
+	public LinkedList<GlobalState> getCs() {
+		return cs;
+	}
+
+	public void setCs(GlobalState cs) {
+		if (!this.cs.contains(cs)) {
+			cs.add(gs);
+			this.cs.add(cs);
+		}
 	}
 
 	public void setId(String id) {
@@ -40,9 +53,13 @@ public class Node {
 	public String toString() {
 		String str = "";
 		Iterator<Node> it = edges.iterator();
-		while (it.hasNext())
-			str += this.id + " - " + it.next().id + "\n" + this.gs.toString()
-					+ "\n";
+		while (it.hasNext()) {
+			str += this.id + " - " + it.next().id + "\n";
+			Iterator<GlobalState> it1 = cs.iterator();
+			while (it1.hasNext()) {
+				str += it1.next().toString() + "\n";
+			}
+		}
 		return str;
 	}
 
@@ -94,5 +111,20 @@ public class Node {
 
 	public void setReturnVar(String string) {
 		returnVar = string;
+	}
+
+	public GlobalState getGs(String callString) {
+		GlobalState gs = new GlobalState();
+		gs.setCallString(callString);
+		Iterator<GlobalState> it = cs.iterator();
+		while (it.hasNext()) {
+			GlobalState x = it.next();
+			if (x.equals(gs))
+				return x;
+		}
+		gs.setCallString(callString);
+		gs.add(this.gs);
+		cs.add(gs);
+		return gs;
 	}
 }

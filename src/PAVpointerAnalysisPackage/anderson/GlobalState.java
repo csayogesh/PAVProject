@@ -29,6 +29,32 @@ public class GlobalState {
 	}
 
 	private LinkedList<State> states;
+	private String callString;
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		GlobalState other = (GlobalState) obj;
+		if (callString == null) {
+			if (other.callString != null)
+				return false;
+		} else if (!callString.equals(other.callString))
+			return false;
+		return true;
+	}
+
+	public String getCallString() {
+		return callString;
+	}
+
+	public void setCallString(String callString) {
+		this.callString = callString;
+	}
 
 	public LinkedList<State> getStates() {
 		return states;
@@ -117,7 +143,7 @@ public class GlobalState {
 	@Override
 	public String toString() {
 		Iterator<State> it = states.iterator();
-		String str = "";
+		String str = "" + callString + "\n";
 		while (it.hasNext()) {
 			State st = it.next();
 			st.displayLHS = true;
