@@ -33,7 +33,6 @@ public class State {
 		try {
 			state.lhs = (Variable) lhs.clone();
 		} catch (CloneNotSupportedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		state.lhs.setcState(state);
@@ -43,7 +42,6 @@ public class State {
 			try {
 				x = (Variable) it.next().clone();
 			} catch (CloneNotSupportedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			x.setcState(state);
@@ -116,8 +114,8 @@ public class State {
 
 	public boolean setRhs(Variable rhs1) {
 		if (!rhs.contains(rhs1)) {
-			rhs.add(rhs1);
-			return true;
+			// values.addAll(rhs1.getValues());
+			return this.setValues(rhs1.getValues());
 		}
 		return false;
 	}
@@ -197,11 +195,7 @@ public class State {
 
 		return (lhs + rhs + comma + values + end);
 	}
-
-	public static void main(String[] args) {
-		new State().toString();
-	}
-
+	
 	public GlobalState getGs() {
 		return gs;
 	}

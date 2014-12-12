@@ -3,8 +3,6 @@ package PAVpointerAnalysisPackage.anderson;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-import PAVpointerAnalysisPackage.approachA.InvokeMethod;
-
 public class GlobalState {
 	public GlobalState() {
 		super();
@@ -75,7 +73,7 @@ public class GlobalState {
 		return res;
 	}
 
-	private boolean merge(State state) {
+	public boolean merge(State state) {
 		Iterator<State> x = states.iterator();
 		boolean res = false;
 		while (x.hasNext()) {

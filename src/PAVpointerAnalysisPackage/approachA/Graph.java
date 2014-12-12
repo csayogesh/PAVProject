@@ -34,8 +34,12 @@ public class Graph {
 
 	public static void printMethods() {
 		Iterator<Graph> it = methodGraphs.iterator();
-		while (it.hasNext())
-			System.out.println(it.next());
+		Graph x;
+		while (it.hasNext()) {
+			x = it.next();
+			x.linkStates();
+			System.out.println(x);
+		}
 	}
 
 	public void createIPGFromIR(SetUpAnalysis setup) {
@@ -49,14 +53,11 @@ public class Graph {
 			String[] arr = main.toString().split("\n");
 			for (int i = 0; i < arr.length; i++) {
 				if (arr[i].contains("invokestatic")) {
-					int m, arg;
-					if (arr[i].contains(" = invokestatic <")) {
+					int m;
+					if (arr[i].contains(" = invokestatic <"))
 						m = 9;
-						arg = 11;
-					} else {
-						arg = 9;
+					else
 						m = 7;
-					}
 					String arr1[] = arr[i].split(" ");
 					String method = arr1[m].split("\\(")[0];
 					CGNode t = setup.getTargetNode(method,
