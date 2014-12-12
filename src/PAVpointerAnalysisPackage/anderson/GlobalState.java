@@ -3,6 +3,8 @@ package PAVpointerAnalysisPackage.anderson;
 import java.util.Iterator;
 import java.util.LinkedList;
 
+import PAVpointerAnalysisPackage.approachA.InvokeMethod;
+
 public class GlobalState {
 	public GlobalState() {
 		super();
@@ -12,14 +14,12 @@ public class GlobalState {
 	public boolean add(GlobalState gs) {
 		boolean res = false;
 		Iterator<State> it = gs.states.iterator();
-		while (it.hasNext())
-			try {
-				State state = (State) it.next().clone();
-				state.setGs(this);
-				res = this.setState(state);
-			} catch (CloneNotSupportedException e) {
-				e.printStackTrace();
-			}
+		while (it.hasNext()) {
+			State x = it.next();
+			State state = (State) x.clone();
+			state.setGs(this);
+			res = this.setState(state);
+		}
 		return res;
 	}
 
@@ -165,5 +165,19 @@ public class GlobalState {
 			}
 		}
 		return null;
+	}
+
+	public State getState(String str) {
+		Iterator<State> it = states.iterator();
+		while (it.hasNext()) {
+			State st = it.next();
+			if (st.getLhs().getName().equals(str))
+				return st;
+		}
+		State res = new State();
+		res.setLhs(new Variable());
+		res.getLhs().setName(str);
+		this.setState(res);
+		return res;
 	}
 }

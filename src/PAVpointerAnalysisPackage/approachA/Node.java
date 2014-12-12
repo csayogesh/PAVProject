@@ -1,5 +1,6 @@
 package PAVpointerAnalysisPackage.approachA;
 
+import java.lang.reflect.Method;
 import java.util.Iterator;
 import java.util.LinkedList;
 
@@ -97,6 +98,10 @@ public class Node {
 		return gs;
 	}
 
+	public String getReturnVar() {
+		return returnVar;
+	}
+
 	public void setGs(GlobalState gs) {
 		this.gs = gs;
 	}
@@ -126,5 +131,34 @@ public class Node {
 		gs.add(this.gs);
 		cs.add(gs);
 		return gs;
+	}
+
+	public void makeProcedureCall(String callString) {
+		Iterator<State> it = gs.getStates().iterator();
+		while (it.hasNext()) {
+			State state = it.next();
+			if (state.getClass() == InvokeMethod.class) {
+				InvokeMethod i = (InvokeMethod) state;
+				Graph g = Graph.getMethodG(i.getMethod());
+				int j = 0;
+				for (String str : i.arguments) {
+					GlobalState x = this.getGs(callString);
+					State st = x.getState(str);
+					g.passArgument(
+							callString + "$" + i.getMethod() + i.getLineNo(),
+							st, j + 1);
+					j++;
+				}
+				g.runKildallCallString(callString + "$" + i.getMethod()
+						+ i.getLineNo());
+				g.retrieveParameters(
+						callString + "$" + i.getMethod() + i.getLineNo(), i,
+						this, callString);
+			}
+		}
+	}
+
+	public State getState(String string, String string2) {
+		return this.getGs(string).getState(string2);
 	}
 }

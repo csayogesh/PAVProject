@@ -71,14 +71,7 @@ public class AndersonAnalysis {
 			state = extractArrayload(string, gs);
 		else if (string.contains("invokestatic"))
 			state = extractInvokeStatic(string, gs);
-		// else if (string.contains("return"))
-		// state = extractReturn(string, gs);
 		return state;
-	}
-
-	private static State extractReturn(String string, GlobalState gs) {
-		System.out.println(string);
-		return new State();
 	}
 
 	private static State extractInvokeStatic(String string, GlobalState gs) {

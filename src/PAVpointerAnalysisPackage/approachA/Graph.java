@@ -39,17 +39,31 @@ public class Graph {
 	}
 
 	public void createIPGFromIR(SetUpAnalysis setup) {
-		IR main = setup.getTargetNode(setup.getAnalysisMethod(),
-				setup.getAnalysisClass()).getIR();
-		addNewMethod(main, setup.getAnalysisMethod());
-		String[] arr = main.toString().split("\n");
-		for (int i = 0; i < arr.length; i++) {
-			if (arr[i].contains("invokestatic")) {
-				String arr1[] = arr[i].split(" ");
-				String method = arr1[9].split("\\(")[0];
-				CGNode t = setup
-						.getTargetNode(method, setup.getAnalysisClass());
-				addNewMethod(t.getIR(), method);
+		LinkedList<String> q = new LinkedList<String>();
+		q.addLast(setup.getAnalysisMethod());
+		while (!q.isEmpty()) {
+			String str = q.removeFirst();
+			IR main = setup.getTargetNode(str, setup.getAnalysisClass())
+					.getIR();
+			addNewMethod(main, str);
+			String[] arr = main.toString().split("\n");
+			for (int i = 0; i < arr.length; i++) {
+				if (arr[i].contains("invokestatic")) {
+					int m, arg;
+					if (arr[i].contains(" = invokestatic <")) {
+						m = 9;
+						arg = 11;
+					} else {
+						arg = 9;
+						m = 7;
+					}
+					String arr1[] = arr[i].split(" ");
+					String method = arr1[m].split("\\(")[0];
+					CGNode t = setup.getTargetNode(method,
+							setup.getAnalysisClass());
+					addNewMethod(t.getIR(), method);
+					q.addLast(method);
+				}
 			}
 		}
 	}
@@ -174,6 +188,11 @@ public class Graph {
 				if (lines[i].matches("BB[0-9]*")) {
 					cur = findNode(lines[i]);
 				} else {
+					if (lines[i].contains("return")) {
+						String[] arr = lines[i].split(" ");
+						cur.setReturnVar(arr[4]);
+						continue;
+					}
 					cur.getGs().setState(
 							AndersonAnalysis.fetchState(lines[i], cur.getGs()));
 				}
@@ -192,11 +211,14 @@ public class Graph {
 				continue;
 			if (node.isMarked()) {
 				Iterator<Node> edges = node.getEdges().iterator();
+				node.makeProcedureCall(callString);
 				while (edges.hasNext()) {
 					Node child = edges.next();
 					if (child == null)
 						continue;
-					if (child.getGs(callString).add(node.getGs(callString))) {
+					boolean res = child.getGs(callString).add(
+							node.getGs(callString));
+					if (res) {
 						change = true;
 						child.setMarked(true);
 						Iterator<Node> i = child.getEdges().iterator();
@@ -212,7 +234,7 @@ public class Graph {
 		return change;
 	}
 
-	private void runKildallCallString(String callString) {
+	public void runKildallCallString(String callString) {
 		boolean change = true;
 		setAllNodesMarked();
 		while (change) {
@@ -307,4 +329,61 @@ public class Graph {
 		}
 	}
 
+	public static Graph getMethodG(String method) {
+		Iterator<Graph> it = methodGraphs.iterator();
+		while (it.hasNext()) {
+			Graph g = it.next();
+			if (g.getMethod().equals(method))
+				return g;
+		}
+		System.out.println(method);
+		try {
+			throw new Exception("Should not reach here");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	public void passArgument(String callString, State st, int i) {
+		Node node = this.getNode("BB0");
+		GlobalState gs = node.getGs(callString);
+		State y = (State) st.clone();
+		y.getLhs().setName("v" + i);
+		gs.setState(y);
+	}
+
+	private Node getNode(String string) {
+		Iterator<Node> it = nodes.iterator();
+		while (it.hasNext()) {
+			Node x = it.next();
+			if (x.getId().equals(string))
+				return x;
+		}
+		return null;
+	}
+
+	public void retrieveParameters(String string, InvokeMethod i, Node node,
+			String callString) {
+		Iterator<Node> it = this.nodes.iterator();
+		Node x;
+		while (it.hasNext()) {
+			x = it.next();
+			if (x.getReturnVar() != null) {
+				int j = 0;
+				for (String str : i.getArguments()) {
+					State s1 = x.getState(string, "v" + (j + 1));
+					node.getState(callString, str).setRhs(s1.getRhs());
+					node.getState(callString, str).setValues(s1.getValues());
+					j++;
+				}
+				if (i.getLhs().getName().equals(" ")) {
+					node.getState(callString, i.getLhs().getName()).setRhs(
+							x.getState(string, x.getReturnVar()).getRhs());
+					node.getState(callString, i.getLhs().getName()).setValues(
+							x.getState(string, x.getReturnVar()).getValues());
+				}
+			}
+		}
+	}
 }

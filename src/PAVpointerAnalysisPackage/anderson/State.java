@@ -28,13 +28,24 @@ public class State {
 	public boolean displayLHS;
 
 	@Override
-	protected Object clone() throws CloneNotSupportedException {
+	public Object clone() {
 		State state = new State();
-		state.lhs = (Variable) lhs.clone();
+		try {
+			state.lhs = (Variable) lhs.clone();
+		} catch (CloneNotSupportedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		state.lhs.setcState(state);
 		Iterator<Variable> it = rhs.iterator();
 		while (it.hasNext()) {
-			Variable x = (Variable) it.next().clone();
+			Variable x = null;
+			try {
+				x = (Variable) it.next().clone();
+			} catch (CloneNotSupportedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			x.setcState(state);
 			state.setRhs(x);
 		}
